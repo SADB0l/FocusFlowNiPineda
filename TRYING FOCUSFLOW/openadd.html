@@ -1,0 +1,109 @@
+<html>
+<style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+	.addcontainer {
+            max-width: 400px;
+			height: 350px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+		}
+		
+		.input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            font-size: 16px;
+            font-weight: bold;
+			margin-top: 8px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .input-group input {
+            height: 40px;
+        }
+
+        .input-group textarea {
+            height: 120px;
+            resize: none;
+        }
+		
+		.AddCard {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+		
+		.AddCard:hover {
+            background-color: #45a049;
+        }
+		
+		.Closecard {
+            background-color: #e53935;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .Closecard:hover {
+            background-color: #f44336;
+        }
+</style>
+
+<!-- call this when openadd is been executed -->
+<div class="addcontainer">
+    <div class="input-group">
+        <label for="front">Front (Question)</label>
+        <input type="text" id="front" placeholder="Enter question">
+        <label for="back">Back (Answer)</label>
+        <textarea id="back" placeholder="Enter answer"></textarea>
+        <button class="AddCard">Add</button>
+        <button class="Closecard">Close</button>
+    </div>
+</div>
+
+<script>
+        document.querySelector(".AddCard").addEventListener("click", function () {
+            const frontText = document.getElementById("front").value;
+            const backText = document.getElementById("back").value;
+            window.parent.postMessage({ type: "addFlashcard", front: frontText, back: backText }, "*");
+            window.parent.postMessage({ type: "closeModal" }, "*");
+        });
+
+        document.querySelector(".Closecard").addEventListener("click", function () {
+            window.parent.postMessage({ type: "closeModal" }, "*");
+        });
+</script>
+

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preset Modal</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800");
+        body {
+            font-family: "Poppins", sans-serif;
+        }
+        
+        .preset-add {
+            font-family: "Poppins", sans-serif;
+            margin: auto;
+            text-align: center;
+            justify-content: center;
+            display: block;
+            align-items: center;
+            height: 100px;
+            width: 300px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #fff;
+        }
+
+        .preset-input {
+            height: 30px;
+            width: 150px;
+            border-color: #000000;
+            border-radius: 100px;
+            padding: 5px;
+            font-size: 1em;
+        }
+
+        .preset-dropdown {
+            height: 45px;
+            width: 100px;
+            margin: 10px;
+            border-radius: 100px;
+            padding: 5px;
+            font-size: 1em;
+        }
+
+        .preset-done,
+        .preset-close {
+            text-align: center;
+            height: 45px;
+            width: 90px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 100px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .preset-close {
+            background-color: #f44336;
+        }
+
+        .preset-done:hover {
+            background-color: #3f9642;
+        }
+
+        .preset-close:hover {
+            background-color: #d32f2f;
+        }
+
+        .done-con {
+            gap: 10px;
+            text-align: center;
+            justify-content: center;
+            display: flex;
+        }
+    </style>
+</head>
+<div class="preset-add">
+    <input type="number" id="presetValue" class="preset-input" placeholder="Enter value">
+    <select id="presetType" class="preset-dropdown">
+        <option value="seconds">Seconds</option>
+        <option value="minutes">Minutes</option>
+        <option value="hours">Hours</option>
+    </select>
+    <div class="done-con">
+        <button class="preset-done" onclick="presetdone()">Done</button>
+        <button class="preset-close" onclick="presetclose()">Close</button>
+    </div>
+</div>
+<script>
+    function presetdone() {
+        const value = document.getElementById("presetValue").value;
+        const unit = document.getElementById("presetType").value;
+
+        if (!value || isNaN(value) || value <= 0) {
+            alert("Please enter a valid number.");
+            return;
+        }
+
+        window.parent.postMessage({ type: "addPreset", value: value, unit: unit }, "*");
+    }
+
+    function presetclose() {
+        window.parent.postMessage({ type: "closeModal" }, "*");
+    }
+</script>
+
+</html>

@@ -1,0 +1,174 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Header</title>
+    <link rel="stylesheet" href="Features/Css/All.css">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .navhead {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 20px;
+            height: 50px;
+            background-color: #fff;
+        }
+
+        .navoptions {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .navoptions li {
+            font-weight: bold;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .navoptions a {
+            text-decoration: none;
+            color: black;
+            padding: 8px 16px;
+            display: block;
+        }
+
+        .navoptions li::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -2px;
+            width: 0%;
+            height: 3px;
+            background-color: #007bff;
+            transition: width 0.3s ease-in-out;
+            transform: translateX(-50%);
+        }
+
+
+        .navoptions li:hover::after {
+            width: 80px;
+        }
+
+        .active-link::after {
+            width: 80px !important; /* Indicator */
+        }
+
+        #popupContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+        }
+
+        iframe {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navhead">
+        <ul class="navoptions">
+            <li><a href="#" onclick="openPage('Features/Home/Home.html', this)">Introduction</a></li>
+            <li><a href="#" onclick="openPage('Features/Timer/Timer.html', this)">Timer</a></li>
+            <li><a href="#" onclick="openPage('Features/Flashcard/Flashcard.html', this)">Flashcard</a></li>
+            <li><a href="#" onclick="openPage('Features/Tutorial/Tutor.html', this)">Tutorial</a></li>
+        </ul>
+    </header>
+
+    <div id="popupContainer"></div>
+
+    <script>
+        const pages = {};
+        let activeLink = null;
+
+        function openPage(page, element) {
+            if (!pages[page]) {
+                // Create iframe for new page
+                const iframe = document.createElement("iframe");
+                iframe.src = page;
+                iframe.style.display = "none";
+                pages[page] = iframe;
+                document.getElementById("popupContainer").appendChild(iframe);
+            }
+            // open iframe if loaded
+            Object.values(pages).forEach(iframe => (iframe.style.display = "none"));
+            pages[page].style.display = "block";
+
+            // Highlight the active
+            if (activeLink) {
+                activeLink.parentElement.classList.remove("active-link");
+            }
+            activeLink = element;
+            activeLink.parentElement.classList.add("active-link");
+        }
+
+        window.addEventListener("message", function(event) {
+            if (event.data.type === "showNotification") {
+                showNotification();
+            }
+        });
+
+        function showNotification() {
+            const notificationModal = document.createElement("div");
+            notificationModal.style.position = "fixed";
+            notificationModal.style.top = "0";
+            notificationModal.style.left = "0";
+            notificationModal.style.width = "100%";
+            notificationModal.style.height = "100%";
+            notificationModal.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+            notificationModal.style.display = "flex"; 
+            notificationModal.style.justifyContent = "center"; 
+            notificationModal.style.alignItems = "center"; 
+            notificationModal.style.zIndex = "1000";
+
+            const iframe = document.createElement("iframe");
+            iframe.src = "Features/Notification/Notif.html"; 
+            iframe.style.width = "320px"; 
+            iframe.style.height = "280px";
+            iframe.style.border = "none";
+            iframe.style.borderRadius = "10px";
+            iframe.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.2)";
+            iframe.style.background = "transparent"; 
+            iframe.style.display = "block";
+
+            notificationModal.appendChild(iframe);
+            document.body.appendChild(notificationModal);
+
+            window.addEventListener("message", function(event) {
+                if (event.data.type === "closeModal") {
+                    document.body.removeChild(notificationModal);
+                }
+            });
+        }
+
+        window.onload = function () {
+            document.querySelector(".navoptions a").click();
+        };
+    </script>
+
+</body>
+</html>

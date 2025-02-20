@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusFlow</title>
+    <link rel="stylesheet" href="../Css/All.css">
+    <style>
+        body {
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #000, #001944, #00181f);
+            background-size: 300% 300%;
+            animation: gradientAnimation 10s infinite alternate ease-in-out;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .container {
+            max-width: 700px;
+            padding: 40px;
+            opacity: 0;
+            transform: translateY(100px);
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .bttn {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .GST,
+        .TP {
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 100px;
+            width: 140px;
+            height: 50px;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .GST {
+            color: #fff;
+            border: none;
+            background: linear-gradient(135deg, #2049ff, #2877ff);
+        }
+
+        .GST:hover {
+            background: linear-gradient(135deg, #2877ff, #00d9ff);
+            box-shadow: 0 4px 12px rgba(0, 217, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .TP {
+            background: transparent;
+            border: 2px solid #2877ff;
+            color: #2877ff;
+        }
+
+        .TP:hover {
+            background: #2877ff;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 217, 255, 0.3);
+        }
+
+        .about {
+            margin-top: 50px;
+            max-width: 700px;
+            opacity: 0;
+            transform: translateY(100px);
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .about h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .about p {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.75);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>What is FocusFlow?</h1>
+        <p>
+            FocusFlow is a system software designed to enhance learning, time management, and self-study for students
+            and professionals. It features flashcards for efficient memorization and review, allowing users to create
+            and save their own sets. Additionally, it includes a Pomodoro Timer, which helps structure work sessions
+            with scheduled breaks to maintain focus and prevent burnout. Users can customize both the work duration and
+            break times to suit their preferences.
+        </p>
+        <div class="bttn">
+            <button id="GST" class="GST">Get Started</button>
+            <button id="TP" class="TP">Tutorial</button>
+        </div>
+    </div>
+
+    <div class="about">
+        <h1>About Us</h1>
+        <p>
+            Developed by 12-ICT researchers Aquino Rhynel, Caccam Marze Eibee Jamir N., Cariño Joan D., Mariano Judiel
+            H., Martirez Robert M., and Pineda Crisjhondie E., FocusFlow helps users improve study habits, stay
+            organized,
+            and boost productivity.
+        </p>
+    </div>
+</body>
+<script>
+    document.getElementById("GST").addEventListener("click", function () {
+        window.parent.postMessage({ action: "openTimer" }, "*");
+    });
+
+    document.getElementById("TP").addEventListener("click", function () {
+        window.parent.postMessage({ action: "openTutorial" }, "*");
+    });
+</script>
+
+</html>

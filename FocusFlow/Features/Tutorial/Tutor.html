@@ -1,0 +1,230 @@
+<html>
+<link rel="stylesheet" href="../Css/All.css">
+<link rel="stylesheet" href="../Css/Timer.css">
+<style>
+    body {
+        padding-top: 70px;
+        padding-bottom: 30px;
+    }
+
+    .tutor-butts {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        opacity: 0;
+        transform: translateY(100px);
+        animation: fadeInUp 0.5s ease-out forwards;
+    }
+
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    body {
+        margin-left: 50px;
+        color: #fff;
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #000, #001944, #00181f);
+        background-size: 300% 300%;
+        animation: gradientAnimation 10s infinite alternate ease-in-out;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    @keyframes gradientAnimation {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    .done-set,
+    .preset-button,
+    .deletePreset {
+        width: 130px;
+        height: 45px;
+    }
+
+    .stop-timer-button {
+        font-family: "Poppins", sans-serif;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        border: none;
+        color: #fff;
+        border-radius: 100px;
+        width: 100px;
+        height: 100px;
+    }
+
+    div:not(.Tutor-butts, .checkbx, .fcards-label) {
+        width: 90%;
+        padding: 30px;
+        border-radius: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        background-color: rgba(225, 225, 225, 0.1);
+        backdrop-filter: blur(10px);
+        position: relative;
+    }
+
+    div:not(.Tutor-butts)::after {
+        content: "";
+        position: absolute;
+        left: 180px;
+        top: 10%;
+        bottom: 10%;
+        width: 2px;
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    label {
+        margin-left: 50px;
+        font-size: 16px;
+        color: white;
+    }
+
+    .SSR {
+        margin-left: 80px;
+    }
+
+    .fcards-butt button:not(.toggle-btn, .dl) {
+        padding: 10px;
+        font-size: 14px;
+        background-color: white;
+        color: #000000;
+        border: none;
+        border-radius: 40px;
+        cursor: pointer;
+        text-align: center;
+        box-shadow: 0 5px 2px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s;
+        width: 125px;
+        height: 125px;
+    }
+
+    .fcards-butt button:hover:not(.toggle-btn) {
+        transform: scale(1.05);
+    }
+
+    .delete-all-btn,
+    .save-btn,
+    .shuff-btn {
+        width: 90px;
+        height: 90px;
+    }
+
+    .dl {
+        transition: transform 0.3s;
+        border: none;
+        border-radius: 40px;
+        height: 50px;
+        width: 120px;
+    }
+
+    .divider {
+        margin-top: 50px;
+    }
+</style>
+
+<body>
+    <div class="Tutor-butts">
+        <h1>Timer Tutorial</h1>
+
+        <div>
+            <button id="startStopButton" class="timer-button" onclick="startStopTimer()">Start</button>
+            <label class="SSR">Used to start the timer</label>
+        </div>
+
+        <div>
+            <button id="stopButton" class="stop-timer-button" onclick="startStopTimer()">Stop</button>
+            <label class="SSR">Stops the timer</label>
+        </div>
+
+        <div>
+            <button class="resetTimer-button" onclick="resetTimer()">Skip</button>
+            <label class="SSR">Skips the break time and continue to another session of pomodoro timer</label>
+        </div>
+
+        <div>
+            <button class="resetTimer-button" onclick="resetTimer()">Reset</button>
+            <label class="SSR">Resets the timer back to the standard pomodoro timer (25 Minutes)</label>
+        </div>
+
+        <div>
+            <button class="preset-button" onclick="openPresetModal()">+</button>
+            <label>Adds a preset for additional time (e.g +15minutes)</label>
+        </div>
+
+        <div>
+            <button class="deletePreset" onclick="deletePreset()">Delete</button>
+            <label>Deletes the latest preset created (note: the lastest preset is always on the last)</label>
+        </div>
+
+        <div>
+            <button class="done-set">Change Time</button>
+            <label>Confirm the modified time that has been input</label>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="Tutor-butts">
+        <h1>Flashcard Tutorial</h1>
+
+        <div class="fcards-butt">
+            <button class="edit-btn" onclick="editCard()">Edit</button>
+            <label class="SSR">Edit an existing flashcard that has a RED indicator</label>
+        </div>
+
+        <div class="fcards-butt">
+            <button class="delete-btn" onclick="deleteCard()">Delete</button>
+            <label class="SSR">Delete the selected flashcard that has a RED indicator</label>
+        </div>
+
+        <div class="fcards-butt">
+            <button class="delete-all-btn" id="deleteAllBtn">Delete All</button>
+            <label class="SSR">Deletes all existing flashcards</label>
+        </div>
+
+        <div class="fcards-butt">
+            <button class="shuff-btn" onclick="shuffCard()">Shuffle</button>
+            <label class="SSR">Shuffle the order of flashcards randomly</label>
+        </div>
+
+        <div class="fcards-butt">
+            <button class="save-btn" onclick="downloadFlashcards()">Save</button>
+            <label class="SSR">Save all flashcards as a .Json file that can be uploaded in the drag and drop box</label>
+        </div>
+
+        <div class="fcards-butt">
+            <button class="dl" onclick="uploadFlashcards()">Upload</button>
+            <label class="SSR">Upload the flashcards that has been downloaded as a .Json file (Note: You need to import
+                or drag and drop the file to be uploaded)</label>
+        </div>
+    </div>
+
+
+
+    <script>
+
+    </script>
+</body>
+
+</html>

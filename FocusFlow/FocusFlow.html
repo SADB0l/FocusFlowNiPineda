@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Header</title>
+    <link rel="stylesheet" href="Features/Css/All.css">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .navhead {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 20px;
+            height: 50px;
+        }
+
+        .navpanel {
+            box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+            background-color: rgba(225, 225, 225, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 100px;
+        }
+
+        .logo {
+            position: absolute;
+            left: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 150px;
+            height: 45px;
+            background-color: rgba(225, 225, 225, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 100px;
+            padding: 5px;
+            row-gap: 10px;
+        }
+
+        .logo img {
+            width: 30%;
+            height: auto;
+            object-fit: contain;
+            background: none;
+        }
+
+        .logo label {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .small-timer,
+        .WT {
+            position: absolute;
+            color: #ddd;
+            font-weight: bold;
+        }
+
+        .WT {
+            color: #f44336;
+            font-size: 0.8rem;
+            top: 5px;
+        }
+
+        .stimer {
+            flex-direction: column;
+            position: absolute;
+            right: 64px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 150px;
+            height: 45px;
+            background-color: rgba(225, 225, 225, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 100px;
+            padding: 5px;
+            row-gap: 10px;
+            transition: all 0.4s ease-in-out;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .stimer.expanded {
+            margin-top: 50px;
+            flex-direction: column;
+            right: 64px;
+            background-color: rgba(225, 225, 225, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 5px;
+            row-gap: 10px;
+            width: 200px;
+            height: 100px;
+        }
+
+        .WT,
+        .small-timer {
+            transition: font-size 0.3s ease-in-out;
+        }
+
+        .stimer.expanded .WT {
+            font-size: 1rem;
+        }
+
+        .stimer.expanded .small-timer {
+            font-size: 2rem;
+        }
+
+        .navoptions {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .navoptions li {
+            font-weight: bold;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .navoptions a {
+            text-decoration: none;
+            color: #ddd;
+            padding: 8px 16px;
+            display: block;
+        }
+
+        .navoptions li::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: 5px;
+            width: 0%;
+            height: 3px;
+            background-color: #007bff;
+            transition: width 0.3s ease-in-out;
+            transform: translateX(-50%);
+        }
+
+        .navoptions li:hover::after {
+            width: 80px;
+        }
+
+        .active-link::after {
+            width: 80px !important;
+        }
+
+        #popupContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+        }
+
+        iframe {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navhead">
+        <div class="logo">
+            <img src="Logo.png" height="40px">
+            <label>FocusFlow</label>
+        </div>
+        <div class="navpanel">
+            <ul class="navoptions">
+                <li><a href="#" onclick="openPage('Features/Home/Home.html', this)">Introduction</a></li>
+                <li><a href="#" onclick="openPage('Features/Timer/Timer.html', this)">Timer</a></li>
+                <li><a href="#" onclick="openPage('Features/Flashcard/Flashcard.html', this)">Flashcard</a></li>
+                <li><a href="#" onclick="openPage('Features/Tutorial/Tutor.html', this)">Tutorial</a></li>
+            </ul>
+        </div>
+        <div class="stimer">
+            <div class="WT">Pomodoro</div>
+            <div class="small-timer" id="timerDisplay">25:00</div>
+        </div>
+    </header>
+
+    <div id="popupContainer"></div>
+
+    <script>
+        const pages = {};
+        let activeLink = null;
+
+        function openPage(page, element) {
+            const popupContainer = document.getElementById("popupContainer");
+            const stimer = document.querySelector(".stimer");
+
+            if (page.includes("Features/Timer/Timer.html")) {
+                stimer.style.display = "none";
+            } else {
+                stimer.style.display = "flex";
+            }
+
+            Object.values(pages).forEach(iframe => (iframe.style.display = "none"));
+            if (!pages[page]) {
+                const iframe = document.createElement("iframe");
+                iframe.src = page;
+                iframe.style.display = "none";
+                pages[page] = iframe;
+                popupContainer.appendChild(iframe);
+            }
+            pages[page].style.display = "block";
+
+            if (activeLink) {
+                activeLink.parentElement.classList.remove("active-link");
+            }
+            activeLink = element;
+            activeLink.parentElement.classList.add("active-link");
+        }
+
+        window.addEventListener("message", function (event) {
+            if (event.data.type === "updateTimer") {
+                const smallTimer = document.querySelector(".small-timer");
+                if (smallTimer) {
+                    smallTimer.innerHTML = event.data.time;
+                }
+            }
+
+            if (event.data.type === "updateMode") {
+                const WTElement = document.querySelector(".WT");
+                WTElement.textContent = event.data.mode === "break" ? "Break" : "Pomodoro";
+                WTElement.style.color = event.data.mode === "break" ? "#4CAF50" : "#f44336";
+            }
+
+            if (event.data.type === "showNotification") {
+                showNotification(event.data.isBreakTime);
+            }
+            else if (event.data.action === "openTimer") {
+                openPage('Features/Timer/Timer.html', document.querySelector(".navoptions li:nth-child(2) a"));
+            }
+            else if (event.data.action === "openTutorial") {
+                openPage('Features/Tutorial/Tutor.html', document.querySelector(".navoptions li:nth-child(4) a"));
+            }
+        });
+
+        document.querySelector(".stimer").addEventListener("click", function () {
+            this.classList.toggle("expanded");
+        });
+
+        window.onload = function () {
+            document.querySelector(".navoptions a").click();
+        };
+
+
+        function showNotification(isBreakTime) {
+            const notificationModal = document.createElement("div");
+            notificationModal.style.position = "fixed";
+            notificationModal.style.top = "0";
+            notificationModal.style.left = "0";
+            notificationModal.style.width = "100%";
+            notificationModal.style.height = "100%";
+            notificationModal.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+            notificationModal.style.display = "flex";
+            notificationModal.style.justifyContent = "center";
+            notificationModal.style.alignItems = "center";
+            notificationModal.style.zIndex = "1000";
+
+            const iframe = document.createElement("iframe");
+            iframe.src = "Features/Notification/Notif.html";
+            iframe.style.width = "320px";
+            iframe.style.height = "280px";
+            iframe.style.border = "none";
+            iframe.style.borderRadius = "10px";
+            iframe.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.2)";
+            iframe.style.background = "transparent";
+            iframe.style.display = "block";
+
+            notificationModal.appendChild(iframe);
+            document.body.appendChild(notificationModal);
+
+            const audio = new Audio("Features/Notification/FocusFlow-Alarm.mp3");
+            audio.loop = true;
+            audio.play().catch(error => console.log("Audio play failed:", error));
+
+            iframe.onload = function () {
+                iframe.contentWindow.postMessage({ type: "updateText", text: isBreakTime ? "Break Time!" : "Time's Up!" }, "*");
+            };
+
+            window.addEventListener("message", function (event) {
+                if (event.data.type === "closeModal") {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    document.body.removeChild(notificationModal);
+                }
+            });
+        }
+
+        // Accidental Refresh
+        window.addEventListener("beforeunload", function (event) {
+            event.preventDefault();
+            event.returnValue = "Are you sure you want to leave? Your progress will be lost.";
+        });
+
+
+
+    </script>
+</body>
+
+</html>

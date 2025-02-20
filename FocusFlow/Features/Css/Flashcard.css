@@ -1,0 +1,418 @@
+body {
+    background-image: url(../Flashcard/BG.svg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: background-image 0.5s ease-in-out;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: inherit;
+    background-size: inherit;
+    background-position: inherit;
+    background-repeat: inherit;
+    z-index: -1;
+    animation: moveBackground 30s linear infinite alternate;
+}
+
+@keyframes moveBackground {
+    0% { transform: scale(1.05) translate(0, 0); }
+    50% { transform: scale(1.1) translate(5px, 5px); }
+    100% { transform: scale(1.05) translate(-5px, -5px); }
+}
+
+
+.flashcard-container {
+    background-color: #182F5D;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    column-gap: 40px;
+    max-width: 90%;
+    margin: auto;
+    padding: 20px;
+    border-radius: 30px;
+    transition: transform 0.3s ease-in-out;
+    opacity: 0;
+    transform: translateY(100px);
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.flashcard {
+    width: 100%;
+    max-width: 250px;
+    aspect-ratio: 5 / 3;
+    cursor: pointer;
+    position: relative;
+    perspective: 1000px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 1;
+    row-gap: 5px;
+    margin-bottom: 50px;
+    transition: transform 0.2s ease-in-out;
+}
+
+
+
+.flashcard:hover {
+    transform: scale(1.05);
+    z-index: 500;
+}
+
+.card-inner {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease-in-out;
+}
+
+.flashcard.flip .card-inner {
+    transform: rotateY(180deg);
+}
+
+.front,
+.back {
+    margin-top: 5px;
+    width: 90%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.front:hover,
+.back:hover {
+    border: 1px solid;
+    box-shadow: 0 5px 2px rgba(0, 0, 0, 0.1);
+}
+
+.front::before,
+.back::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
+    display: none;
+    z-index: 1;
+}
+
+/* Show Active */
+.flashcard.active-card .front::before,
+.flashcard.active-card .back::before {
+    display: block;
+}
+
+.front {
+    background-color: #97b8fc;
+    color: #333;
+    font-weight: bold;
+    padding: 20px;
+}
+
+.back {
+    background-color: #0c1b38;
+    color: white;
+    transform: rotateY(180deg);
+    padding: 20px;
+}
+
+.btn {
+    margin-bottom: 15px;
+    background-color: #fff;
+    color: white;
+    outline: 2px solid black;
+    border-radius: 20px;
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    width: 250px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+.btn img {
+    border-radius: 20px;
+    height: 180px;
+}
+
+.btn:hover {
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+    z-index: 500;
+}
+
+
+@keyframes shuffleAnimation {
+    0% {
+        transform: translateY(0px) rotate(0deg);
+    }
+
+    25% {
+        transform: translateY(-10px) rotate(3deg);
+    }
+
+    50% {
+        transform: translateY(5px) rotate(-3deg);
+    }
+
+    75% {
+        transform: translateY(-5px) rotate(2deg);
+    }
+
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+}
+
+.flashcard.shuffle {
+    animation: shuffleAnimation 0.3s ease-in-out;
+}
+
+.fcount {
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+}
+
+.headerofflashcard {
+    margin-top: 0px;
+    border-radius: 90px;
+    position: fixed;
+    left: 10px;
+    width: 400px;
+    height: 80vh;
+    background-color: rgb(0, 84, 173);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    gap: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Hide sidebar by moving it off-screen */
+.hidden-sidebar {
+    transform: translateX(-420px);
+}
+
+/* Default toggle button */
+.toggle-btn {
+    font-size: large;
+    background-color: rgb(0, 84, 173);
+    position: absolute;
+    top: 45%;
+    left: 410px;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    border-radius: 50px;
+    height: 100px;
+    width: 50px;
+    transition: left 0.3s ease-in-out;
+    /* Smooth animation */
+}
+
+/* When sidebar is hidden, move it left */
+.toggle-btn-hidden {
+    font-size: large;
+    right: 50px;
+}
+
+
+
+.headerofflashcard button:not(.toggle-btn) {
+    padding: 10px;
+    font-size: 14px;
+    background-color: white;
+    color: #000000;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 0 5px 2px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s;
+}
+
+.edit-btn,
+.delete-btn {
+    width: 125px;
+    height: 125px;
+}
+
+.delete-all-btn,
+.save-btn,
+.shuff-btn {
+    width: 90px;
+    height: 90px;
+}
+
+.e-d-con,
+.da-sh-sa-con {
+    flex-direction: column;
+}
+
+.headerofflashcard button:hover:not(.toggle-btn) {
+    transform: scale(1.05);
+}
+
+.upload {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.checkbx {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.checkbx {
+    width: 250px;
+    height: 50px;
+    justify-content: center;
+    border-radius: 80px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkbx label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000;
+}
+
+.checkbx input[type="checkbox"] {
+    appearance: none;
+    width: 42px;
+    height: 22px;
+    background: #888;
+    border-radius: 50px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.checkbx input[type="checkbox"]::before {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 3px;
+    transition: transform 0.3s ease;
+}
+
+.checkbx input[type="checkbox"]:checked {
+    background: #0060c7;
+}
+
+.checkbx input[type="checkbox"]:checked::before {
+    transform: translateX(20px);
+}
+
+.upload {
+    width: 100%;
+    max-width: 350px;
+    height: 150px;
+    border: 2px dashed #007bff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s ease;
+    position: relative;
+}
+
+.upload:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Hidden file input */
+.upload input[type="file"] {
+    display: none;
+}
+
+/* Upload icon */
+.upload i {
+    font-size: 40px;
+    color: #007bff;
+    margin-bottom: 8px;
+}
+
+/* Upload text */
+.upload p {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* File name display */
+.upload span {
+    font-size: 12px;
+    margin-top: 5px;
+    color: #ddd;
+}
+
+.dl {
+    width: 70%;
+}
+
+body {
+    padding-top: 100px;
+    padding-bottom: 30px;
+}
